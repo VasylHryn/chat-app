@@ -1,13 +1,16 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use App\Models\Message;
+use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
     public function index()
     {
         $messages = Message::with('user')->latest()->get();
-        return view('chat.index', compact('messages'));
+        return view('welcome', compact('messages'));
     }
 
     public function send(Request $request)
@@ -24,3 +27,4 @@ class ChatController extends Controller
         return redirect()->route('chat.index');
     }
 }
+
