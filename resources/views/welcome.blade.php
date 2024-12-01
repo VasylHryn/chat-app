@@ -35,7 +35,13 @@
         @if ($messages->isNotEmpty())
             @foreach ($messages as $message)
                 <div class="alert alert-secondary">
-                    <strong>{{ $message->user->name }}:</strong> {{ $message->message }}
+                    <strong>{{ $message->user->name }}:</strong>
+                    @if ($message->message)
+                        <p>{{ $message->message }}</p>
+                    @endif
+                    @if ($message->image_path)
+                        <img src="{{ asset('storage/' . $message->image_path) }}" alt="Image" class="img-fluid mt-2">
+                    @endif
                 </div>
             @endforeach
         @else
@@ -43,15 +49,21 @@
         @endif
     </div>
 
-    @auth
-        <form action="{{ route('chat.send') }}" method="POST" class="mt-4">
+
+@auth
+        <form action="{{ route('chat.send') }}" method="POST" enctype="multipart/form-data" class="mt-4">
             @csrf
             <div class="mb-3">
                 <label for="message" class="form-label">Your Message</label>
-                <textarea id="message" name="message" class="form-control" rows="3" required></textarea>
+                <textarea id="message" name="message" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Attach an Image</label>
+                <input type="file" id="image" name="image" class="form-control">
             </div>
             <button type="submit" class="btn btn-primary">Send</button>
         </form>
+
     @else
         <p class="text-center mt-4">Please <a href="{{ route('login') }}">login</a> or <a href="{{ route('register') }}">register</a> to send messages.</p>
     @endauth

@@ -16,15 +16,23 @@ class ChatController extends Controller
     public function send(Request $request)
     {
         $request->validate([
-            'message' => 'required|string|max:255',
+            'message' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        }
 
         Message::create([
             'user_id' => auth()->id(),
             'message' => $request->message,
+            'image_path' => $imagePath,
         ]);
 
         return redirect()->route('chat.index');
     }
+
 }
 
