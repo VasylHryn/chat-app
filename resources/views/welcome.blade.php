@@ -3,70 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat App</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Chat Application</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ route('chat.index') }}">Chat App</a>
-        <div class="d-flex">
-            @guest
-                <a href="{{ route('login') }}" class="btn btn-outline-primary me-2">Login</a>
-                <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
-            @endguest
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+<div class="w-full max-w-5xl bg-white shadow-lg rounded-lg p-6 border border-gray-200">
+    <!-- Header -->
+    <header class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-blue-700">Chat Application</h1>
+        @auth
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Logout</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Login</a>
+            <a href="{{ route('register') }}" class="ml-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Register</a>
+        @endauth
+    </header>
 
-            @auth
-                <span class="navbar-text me-3">
-                        Welcome, {{ Auth::user()->name }}
-                    </span>
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-danger">Logout</button>
-                </form>
-            @endauth
-        </div>
-    </div>
-</nav>
-
-<div class="container mt-5">
-    <h1>Chat Messages</h1>
-    <div class="messages">
+    <!-- Chat Messages -->
+    <div class="mb-6 max-h-96 overflow-y-auto border border-gray-300 rounded-md p-4 bg-gray-100">
         @if ($messages->isNotEmpty())
             @foreach ($messages as $message)
-                <div class="alert alert-secondary">
-                    <strong>{{ $message->user->name }}:</strong>
-                    @if ($message->message)
-                        <p>{{ $message->message }}</p>
-                    @endif
+                <div class="mb-4">
+                    <p class="text-lg font-semibold text-gray-800">
+                        {{ $message->user->name }}:
+                    </p>
+                    <p class="text-sm text-gray-600">{{ $message->message }}</p>
                     @if ($message->image_path)
-                        <img src="{{ asset('storage/' . $message->image_path) }}" alt="Image" class="img-fluid mt-2">
+                        <img src="{{ asset('storage/' . $message->image_path) }}" alt="Image" class="mt-2 w-full max-w-md rounded-md shadow-md">
                     @endif
                 </div>
             @endforeach
         @else
-            <p>No messages yet. Be the first to write something!</p>
+            <p class="text-gray-500 text-center">No messages yet. Be the first to write something!</p>
         @endif
     </div>
 
-
-@auth
-        <form action="{{ route('chat.send') }}" method="POST" enctype="multipart/form-data" class="mt-4">
+    <!-- Message Form -->
+    @auth
+        <form action="{{ route('chat.send') }}" method="POST" enctype="multipart/form-data" class="flex flex-col">
             @csrf
-            <div class="mb-3">
-                <label for="message" class="form-label">Your Message</label>
-                <textarea id="message" name="message" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="image" class="form-label">Attach an Image</label>
-                <input type="file" id="image" name="image" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary">Send</button>
+            <textarea name="message" class="mb-4 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-400" rows="3" placeholder="Type your message..."></textarea>
+            <input type="file" name="image" class="mb-4 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-400">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Send</button>
         </form>
-
     @else
-        <p class="text-center mt-4">Please <a href="{{ route('login') }}">login</a> or <a href="{{ route('register') }}">register</a> to send messages.</p>
+        <p class="text-gray-500 text-center">Please <a href="{{ route('login') }}" class="text-blue-600 underline">login</a> to participate in the chat.</p>
     @endauth
+
+    <!-- Footer -->
+    <footer class="mt-8 text-center text-gray-500">
+        <p>Developed by <strong>Vasyl Hryn</strong></p>
+        <div class="flex justify-center space-x-4 mt-2">
+            <a href="https://github.com/vasylhryn" class="text-blue-600 hover:underline">GitHub</a>
+            <a href="https://t.me/ajhvxg" class="text-blue-600 hover:underline">Contact Me</a>
+        </div>
+    </footer>
 </div>
 </body>
 </html>
