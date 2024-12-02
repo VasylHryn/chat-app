@@ -12,13 +12,18 @@
     <header class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold text-blue-700">Chat Application</h1>
         @auth
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Logout</button>
-            </form>
+            <div class="flex items-center space-x-4">
+                <span class="text-lg font-medium text-gray-800"><strong>Welcome back, {{ Auth::user()->name }}</strong></span>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Logout</button>
+                </form>
+            </div>
         @else
-            <a href="{{ route('login') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Login</a>
-            <a href="{{ route('register') }}" class="ml-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Register</a>
+            <div>
+                <a href="{{ route('login') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Login</a>
+                <a href="{{ route('register') }}" class="ml-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Register</a>
+            </div>
         @endauth
     </header>
 
