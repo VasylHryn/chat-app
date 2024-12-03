@@ -3,6 +3,7 @@
 A simple chat application built using **Laravel** and **TailwindCSS**. It supports user authentication, text messaging, and image uploads.
 
 ## Current Look
+![{A0E5FAC9-D1E9-4628-A185-37410C3D320B}](https://github.com/user-attachments/assets/0c432097-0423-4ae8-9f1b-bfff97c1b4a8)
 
 ## Features
 
